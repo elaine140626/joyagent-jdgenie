@@ -1,0 +1,12 @@
+README.md
+pyproject.toml
+app/__init__.py
+app/client.py
+app/config.py
+app/header.py
+app/logger.py
+genie_client.egg-info/PKG-INFO
+genie_client.egg-info/SOURCES.txt
+genie_client.egg-info/dependency_links.txt
+genie_client.egg-info/requires.txt
+genie_client.egg-info/top_level.txt

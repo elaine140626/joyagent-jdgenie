@@ -115,14 +115,35 @@ init_setup() {
     echo -e "${BLUE}🗄️  初始化工具服务数据库...${NC}"
     cd genie-tool
     
-    # 检查虚拟环境
-    if [ ! -d ".venv" ]; then
+     if [ ! -d ".venv" ]; then
         echo -e "${BLUE}创建Python虚拟环境...${NC}"
-        uv sync
+        python -m venv .venv
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}❌ 创建虚拟环境失败${NC}"
+            cd ..
+            return 1
+        fi
+        echo -e "${GREEN}✅ 虚拟环境创建成功${NC}"
     fi
-    
-    # 激活虚拟环境并初始化数据库
-    source .venv/bin/activate
+
+    # 兼容Windows和Linux环境的虚拟环境激活方式
+    if [ -f ".venv/Scripts/activate" ]; then
+        # Windows环境
+        . .venv_new/Scripts/activate
+    elif [ -f ".venv/bin/activate" ]; then
+        # Linux/Mac环境
+        . .venv_new/bin/activate
+    else
+        echo -e "${YELLOW}⚠️  无法找到虚拟环境激活脚本，尝试直接运行${NC}"
+    fi
+
+    # 安装依赖
+    echo -e "${BLUE}📦 安装工具服务依赖...${NC}"
+    pip install .
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}⚠️  依赖安装失败，尝试继续运行${NC}"
+    fi
+
     echo -e "${BLUE}初始化数据库...${NC}"
     if python -m genie_tool.db.db_engine; then
         echo -e "${GREEN}✅ 数据库初始化成功${NC}"
@@ -137,10 +158,34 @@ init_setup() {
     echo -e "${BLUE}🔌 创建MCP客户端虚拟环境...${NC}"
     cd genie-client
     
-    # 检查虚拟环境
+   # 检查虚拟环境
     if [ ! -d ".venv" ]; then
         echo -e "${BLUE}创建Python虚拟环境...${NC}"
-        uv venv
+        python -m venv .venv
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}❌ 创建虚拟环境失败${NC}"
+            cd ..
+            return 1
+        fi
+        echo -e "${GREEN}✅ 虚拟环境创建成功${NC}"
+    fi
+    
+    # 激活虚拟环境并安装依赖
+    if [ -f ".venv/Scripts/activate" ]; then
+        # Windows环境
+        . .venv/Scripts/activate
+    elif [ -f ".venv/bin/activate" ]; then
+        # Linux/Mac环境
+        . .venv/bin/activate
+    else
+        echo -e "${YELLOW}⚠️  无法找到虚拟环境激活脚本，尝试直接安装依赖${NC}"
+    fi
+    
+    # 安装依赖
+    echo -e "${BLUE}📦 安装MCP客户端依赖...${NC}"
+    pip install .
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}⚠️  依赖安装失败，尝试继续运行${NC}"
     fi
     cd ..
     
@@ -186,14 +231,36 @@ start_tool_service() {
     echo -e "${BLUE}🛠️  启动工具服务...${NC}"
     cd genie-tool
     
-    # 检查虚拟环境
+     # 检查虚拟环境
     if [ ! -d ".venv" ]; then
         echo -e "${BLUE}创建Python虚拟环境...${NC}"
-        uv sync
+        python -m venv .venv
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}❌ 创建虚拟环境失败${NC}"
+            cd ..
+            return 1
+        fi
+        echo -e "${GREEN}✅ 虚拟环境创建成功${NC}"
     fi
     
     # 激活虚拟环境并启动
-    source .venv/bin/activate
+    # 兼容Windows和Linux环境的虚拟环境激活方式
+    if [ -f ".venv/Scripts/activate" ]; then
+        # Windows环境
+        . .venv/Scripts/activate
+    elif [ -f ".venv/bin/activate" ]; then
+        # Linux/Mac环境
+        . .venv/bin/activate
+    else
+        echo -e "${YELLOW}⚠️  无法找到虚拟环境激活脚本，尝试直接运行${NC}"
+    fi
+    
+    # 安装依赖
+    echo -e "${BLUE}📦 安装工具服务依赖...${NC}"
+    pip install .
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}⚠️  依赖安装失败，尝试继续运行${NC}"
+    fi
     
     # 启动服务
     if [ -f "start.sh" ]; then
@@ -213,14 +280,36 @@ start_mcp_client() {
     echo -e "${BLUE}🔌 启动MCP客户端服务...${NC}"
     cd genie-client
     
-    # 检查虚拟环境
+      # 检查虚拟环境
     if [ ! -d ".venv" ]; then
         echo -e "${BLUE}创建Python虚拟环境...${NC}"
-        uv venv
+        python -m venv .venv
+        if [ $? -ne 0 ]; then
+            echo -e "${RED}❌ 创建虚拟环境失败${NC}"
+            cd ..
+            return 1
+        fi
+        echo -e "${GREEN}✅ 虚拟环境创建成功${NC}"
     fi
     
     # 激活虚拟环境并启动
-    source .venv/bin/activate
+    # 兼容Windows和Linux环境的虚拟环境激活方式
+    if [ -f ".venv/Scripts/activate" ]; then
+        # Windows环境
+        . .venv/Scripts/activate
+    elif [ -f ".venv/bin/activate" ]; then
+        # Linux/Mac环境
+        . .venv/bin/activate
+    else
+        echo -e "${YELLOW}⚠️  无法找到虚拟环境激活脚本，尝试直接运行${NC}"
+    fi
+    
+    # 安装依赖
+    echo -e "${BLUE}📦 安装工具服务依赖...${NC}"
+    pip install .
+    if [ $? -ne 0 ]; then
+        echo -e "${YELLOW}⚠️  依赖安装失败，尝试继续运行${NC}"
+    fi
     
     if [ -f "start.sh" ]; then
         sh start.sh &

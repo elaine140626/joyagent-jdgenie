@@ -1,5 +1,5 @@
 [project]
-name = "python"
+name = "genie-tool"
 version = "0.1.0"
 description = "Genie Tools"
 readme = "README.md"
